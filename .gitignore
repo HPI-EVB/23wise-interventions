@@ -1,0 +1,13 @@
+*.csv
+*.xlsx
+*.xls
+*.tsv
+*.json
+
+*.env
+
+
+.DS_Store
+__pycache__/
+.ipynb_checkpoints
+.vscode
