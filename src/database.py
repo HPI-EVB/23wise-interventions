@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 import pandas as pd
 import os
 
@@ -11,4 +11,4 @@ db_port = os.getenv('DB_PORT')
 engine = create_engine(f'postgresql://{db_user}:{db_pw}@{db_host}:{db_port}/{db_name}')
 
 def read_sql(sql: str) -> pd.DataFrame:
-    return pd.read_sql(sql, engine)
+    return pd.read_sql(text(sql), engine)
