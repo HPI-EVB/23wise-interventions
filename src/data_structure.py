@@ -1,19 +1,36 @@
 from enum import Enum
 from typing import Any
 
-
 class RecordKey(Enum):
     temperature = 0
     pulse = 1
     blood_pressure = 2
     blood_sugar = 3
-    sodium_plasma = 4
-    potassium_plasma = 5
-    hb = 6
-    leucocytes = 7
-    thrombocytes = 8
-    quick_inr = 9
-    aptt = 10
+    blood_oxygen = 4
+    sodium_plasma = 5
+    potassium_plasma = 6
+    hb = 7
+    leucocytes = 8
+    thrombocytes = 9
+    quick_inr = 10
+    aptt = 11
+
+__record_abbreviations = {
+    'Vit_Blutdruck': RecordKey.blood_pressure,
+    'Vit_Puls': RecordKey.pulse,
+    'Vit_Temperatur': RecordKey.temperature,
+    'BZ_Kurve_02': RecordKey.blood_sugar,
+    'Vit_Pulsoximetri': RecordKey.blood_oxygen,
+    # 'PflANM_43': RecordKey.height,
+    # 'statStill_009': RecordKey.height,
+    # 'VZ_HNOGroesse': RecordKey.height,
+    # 'PflANM_44': RecordKey.weight,
+    # 'allgAnamn_139': RecordKey.planned_release,
+}
+
+def record_key_from_abbreviation(abbreviation: str):
+    if abbreviation not in __record_abbreviations: return None
+    return __record_abbreviations[abbreviation]
 
 class Record:
     minutes_since_start: float
