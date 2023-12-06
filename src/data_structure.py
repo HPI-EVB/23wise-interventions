@@ -26,11 +26,25 @@ class Record:
 class Visit:
     records: dict[RecordKey, list[Record]]
 
-    def __init__(self, records: dict[RecordKey, list[Record]] = {}):
-        self.records = records
+    def __init__(self):
+        self.records = {}
 
     def append(self, key: RecordKey, record: Record):
         if key in self.records:
             self.records[key].append(record)
         else:
             self.records[key] = [record]
+
+class VisitData:
+    visits: dict[str, Visit]
+
+    def __init__(self):
+        self.visits = {}
+
+    def append(self, id: str, record_key: RecordKey, record: Record):
+        if id in self.visits:
+            self.visits[id].append(record_key, record)
+        else:
+            visit = Visit()
+            visit.append(record_key, record)
+            self.visits[id] = Visit()
