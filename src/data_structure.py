@@ -1,4 +1,3 @@
-from datetime import date
 from enum import Enum
 from typing import Any
 
@@ -17,8 +16,21 @@ class RecordKey(Enum):
     aptt = 10
 
 class Record:
-    timestamp: date
+    minutes_since_start: float
     value: Any
+
+    def __init__(self, minutes_since_start: float, value: Any):
+        self.minutes_since_start = minutes_since_start
+        self.value = value
 
 class Visit:
     records: dict[RecordKey, list[Record]]
+
+    def __init__(self, records: dict[RecordKey, list[Record]] = {}):
+        self.records = records
+
+    def append(self, key: RecordKey, record: Record):
+        if key in self.records:
+            self.records[key].append(record)
+        else:
+            self.records[key] = [record]
