@@ -2,7 +2,7 @@ include("gaussians.jl")
 include("factors.jl")
 include("graphs.jl")
 
-# cost as value of log of density
+# cost as value of negative log of density
 function cost(prediction::Gaussian, label::Float64)::Float64
     1/2 * log(2 * π * prediction.σ2) + (label - prediction.μ)^2 / (2 * prediction.σ2)
 end
@@ -70,9 +70,6 @@ function gradient_descent(
         μs +=  [rate * (current_cost - evaluate_cost(μs + δ * kernel[i,:], σ2s)) for i in 1:length(values)]
         σ2s += [rate * (current_cost - evaluate_cost(μs, σ2s + δ * kernel[i,:])) for i in 1:length(values)]
         λ += rate * (current_cost - evaluate_cost(μs, σ2s, λ + δ))
-        # TODO: consider having parameters converge individually, i.e. stop
-        #       adjusting param if it has not changed much in the previous
-        #       iteration
     end
 
     # return value transformed back into original shape
