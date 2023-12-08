@@ -1,0 +1,7 @@
+name = "kakilos"
+uuid = "67d60cc2-a3b4-4704-ac9e-73abf16200bf"
+authors = ["Jannis Baum"]
+version = "1.0.0-DEV"
+
+[compat]
+julia = "1"
