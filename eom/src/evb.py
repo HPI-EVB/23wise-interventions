@@ -79,3 +79,16 @@ def get_evb_incidence():
     evb = evb.drop(columns=['sick', 'all'])
     
     return evb
+
+def get_evb_sick_notes():
+    sick_notes = read_sql('''
+        SELECT
+            DATE_TRUNC('week', DATE(ks.min_date)) AS "Kalenderwoche",
+            SUM(ks.anzahl) as "Krankschreibungen"
+        FROM
+            student_data.mvz_krankschreibungen as ks
+        GROUP BY "Kalenderwoche"
+        ORDER BY "Kalenderwoche"
+    ''').sort_values('Kalenderwoche').set_index('Kalenderwoche')
+    sick_notes.index = pd.to_datetime(sick_notes.index).tz_localize(None)
+    return sick_notes
