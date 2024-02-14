@@ -66,15 +66,15 @@ def get_evb_incidence():
         return read_sql(f'''
             WITH plan AS ({plan})
             SELECT
-                DATE_TRUNC('week', (DATE '1990-01-01' + (tag_f * INTERVAL '1 day'))) AS "Kalenderwoche",
+                DATE_TRUNC('week', (DATE '1990-01-01' + (tag_f * INTERVAL '1 day'))) AS "Week",
                 COUNT(*) as "{name}"
-             FROM plan GROUP BY "Kalenderwoche";
+             FROM plan GROUP BY "Week";
         ''')
     
     sickness_count = _counts(sql_sickness_plan, 'sick')
     all_count = _counts(sql_all_plan, 'all')
     
-    evb = pd.merge(sickness_count, all_count, on='Kalenderwoche')
+    evb = pd.merge(sickness_count, all_count, on='Week')
     evb['EVB'] = evb['sick'] / evb['all'] * 100000
     evb = evb.drop(columns=['sick', 'all'])
     
@@ -83,12 +83,12 @@ def get_evb_incidence():
 def get_evb_sick_notes():
     sick_notes = read_sql('''
         SELECT
-            DATE_TRUNC('week', DATE(ks.min_date)) AS "Kalenderwoche",
-            SUM(ks.anzahl) as "Krankschreibungen"
+            DATE_TRUNC('week', DATE(ks.min_date)) AS "Week",
+            SUM(ks.anzahl) as "SickLeave"
         FROM
             student_data.mvz_krankschreibungen as ks
-        GROUP BY "Kalenderwoche"
-        ORDER BY "Kalenderwoche"
-    ''').sort_values('Kalenderwoche').set_index('Kalenderwoche')
+        GROUP BY "Week"
+        ORDER BY "Week"
+    ''').sort_values('Week').set_index('Week')
     sick_notes.index = pd.to_datetime(sick_notes.index).tz_localize(None)
     return sick_notes
