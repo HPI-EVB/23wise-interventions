@@ -27,3 +27,18 @@ def plot_multi(data, cols=None, spacing=.1, **kwargs):
 
     ax.legend(lines, labels, loc=0)
     return ax
+
+def copyable_fig(name: str):
+    import base64
+    import os
+    
+    import matplotlib.pyplot as plt
+    
+    pdf = f'{name}.pdf'
+    plt.savefig(pdf, bbox_inches='tight')
+    with open(pdf, 'rb') as fp:
+        data = fp.read()
+    os.remove(pdf)
+    with open(f'{name}.txt', 'w') as fp:
+        fp.write(base64.b64encode(data).decode('utf-8'))
+    
